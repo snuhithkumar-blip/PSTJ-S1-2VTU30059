@@ -1,0 +1,54 @@
+import java.util.*;
+
+public class Solution {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+
+        Deque<Integer> deque = new ArrayDeque<Integer>();
+        Map<Integer, Integer> frequency = new HashMap<Integer, Integer>();
+
+        int maxUnique = 0;
+
+        for (int i = 0; i < n; i++) {
+            int value = sc.nextInt();
+
+            // Add value to deque
+            deque.addLast(value);
+
+            // Increase frequency
+            if (frequency.containsKey(value)) {
+                frequency.put(value, frequency.get(value) + 1);
+            } else {
+                frequency.put(value, 1);
+            }
+
+            // Remove element when window is too large
+            if (deque.size() > m) {
+                int removed = deque.removeFirst();
+
+                int count = frequency.get(removed);
+
+                if (count == 1) {
+                    frequency.remove(removed);
+                } else {
+                    frequency.put(removed, count - 1);
+                }
+            }
+
+            // Check unique values
+            if (deque.size() == m) {
+                if (frequency.size() > maxUnique) {
+                    maxUnique = frequency.size();
+                }
+            }
+        }
+
+        System.out.println(maxUnique);
+
+        sc.close();
+    }
+}
